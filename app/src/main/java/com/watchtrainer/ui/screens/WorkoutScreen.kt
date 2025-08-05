@@ -200,8 +200,10 @@ fun WorkoutTypeDialog(
     onDismiss: () -> Unit,
     onTypeSelected: (WorkoutType) -> Unit
 ) {
-    androidx.compose.ui.window.Dialog(
-        onDismissRequest = onDismiss
+    // Using Card with manual dismiss instead of Dialog for Wear OS compatibility
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
         Card(
             modifier = Modifier.fillMaxWidth(),

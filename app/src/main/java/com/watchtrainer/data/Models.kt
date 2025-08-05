@@ -60,3 +60,28 @@ data class AiCoachMessage(
     val tip: String? = null,
     val timestamp: Long = System.currentTimeMillis()
 )
+
+data class ExercisePlace(
+    val id: String,
+    val name: String,
+    val address: String,
+    val type: ExercisePlaceType,
+    val isIndoor: Boolean,
+    val distance: Float, // in meters
+    val rating: Float = 0f, // 0-5 rating
+    val latitude: Double,
+    val longitude: Double, 
+    val recommendationReason: String = "",
+    val openingHours: String? = null,
+    val facilities: List<String> = emptyList()
+)
+
+enum class ExercisePlaceType {
+    PARK,
+    GYM,
+    TRAIL,
+    STADIUM,
+    POOL,
+    CYCLE_PATH,
+    OTHER
+}

@@ -1,5 +1,6 @@
 package com.watchtrainer.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -54,18 +55,35 @@ fun GoalProgressCard(
             
             Spacer(modifier = Modifier.height(8.dp))
             
-            // Progress bar
-            LinearProgressIndicator(
-                progress = progress,
+            // Progress bar - using Box instead of LinearProgressIndicator for Wear OS compatibility
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(8.dp),
-                indicatorColor = if (isCompleted) 
-                    MaterialTheme.colors.secondary 
-                else 
-                    MaterialTheme.colors.primary,
-                trackColor = MaterialTheme.colors.onSurface.copy(alpha = 0.1f)
-            )
+                    .height(8.dp)
+            ) {
+                // Track (background)
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            color = MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                )
+                // Progress indicator
+                Box(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(progress)
+                        .background(
+                            color = if (isCompleted) 
+                                MaterialTheme.colors.secondary 
+                            else 
+                                MaterialTheme.colors.primary,
+                            shape = androidx.compose.foundation.shape.RoundedCornerShape(4.dp)
+                        )
+                )
+            }
             
             Spacer(modifier = Modifier.height(8.dp))
             

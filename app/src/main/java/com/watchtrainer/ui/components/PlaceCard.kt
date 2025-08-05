@@ -58,6 +58,7 @@ fun PlaceCard(
                 
                 // Indoor/Outdoor indicator
                 Chip(
+                    onClick = { /* No action needed for indicator */ },
                     label = { 
                         Text(
                             if (place.isIndoor) "실내" else "야외",

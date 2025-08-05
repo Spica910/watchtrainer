@@ -2,10 +2,12 @@ package com.watchtrainer.data
 
 import android.content.Context
 import android.util.Log
-import com.samsung.android.sdk.healthdata.*
+// Samsung Health SDK - commented out until AAR file is added
+// import com.samsung.android.sdk.healthdata.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flowOf
 import java.util.concurrent.TimeUnit
 
 class HealthDataManager(private val context: Context) {
@@ -15,9 +17,11 @@ class HealthDataManager(private val context: Context) {
         private const val APP_TAG = "WatchTrainer"
     }
     
-    private var healthDataStore: HealthDataStore? = null
-    private var healthDataService: HealthDataService? = null
+    // Samsung Health SDK variables - commented out until AAR file is added
+    // private var healthDataStore: HealthDataStore? = null
+    // private var healthDataService: HealthDataService? = null
     
+    /*
     private val connectionListener = object : HealthDataStore.ConnectionListener {
         override fun onConnected() {
             Log.d(TAG, "Health data service connected")
@@ -33,22 +37,39 @@ class HealthDataManager(private val context: Context) {
             healthDataService = null
         }
     }
+    */
     
     fun initialize() {
         try {
-            healthDataStore = HealthDataStore(context, connectionListener)
-            healthDataStore?.connectService()
+            // Samsung Health SDK initialization - commented out until AAR file is added
+            // healthDataStore = HealthDataStore(context, connectionListener)
+            // healthDataStore?.connectService()
+            Log.d(TAG, "Health data manager initialized (SDK disabled)")
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize health data store", e)
         }
     }
     
     fun disconnect() {
-        healthDataStore?.disconnectService()
-        healthDataStore = null
-        healthDataService = null
+        // Samsung Health SDK disconnect - commented out until AAR file is added
+        // healthDataStore?.disconnectService()
+        // healthDataStore = null
+        // healthDataService = null
+        Log.d(TAG, "Health data manager disconnected")
     }
     
+    fun observeHealthData(): Flow<HealthData> = flowOf(
+        HealthData(
+            steps = 0,
+            heartRate = 0,
+            calories = 0f,
+            distance = 0f,
+            activeTime = 0
+        )
+    )
+    
+    /*
+    // Samsung Health SDK observation - commented out until AAR file is added
     fun observeHealthData(): Flow<HealthData> = callbackFlow {
         val healthData = HealthData()
         
@@ -108,8 +129,12 @@ class HealthDataManager(private val context: Context) {
             // Clean up observers
         }
     }
+    */
     
     suspend fun getTodaySteps(): Int {
+        // Samsung Health SDK - return mock data until AAR file is added
+        return 0
+        /*
         return try {
             val resolver = HealthDataResolver(healthDataStore, null)
             val startTime = getStartOfDay()
@@ -143,9 +168,13 @@ class HealthDataManager(private val context: Context) {
             Log.e(TAG, "Failed to get today's steps", e)
             0
         }
+        */
     }
     
     suspend fun getLatestHeartRate(): Int {
+        // Samsung Health SDK - return mock data until AAR file is added
+        return 0
+        /*
         return try {
             val resolver = HealthDataResolver(healthDataStore, null)
             
@@ -173,9 +202,13 @@ class HealthDataManager(private val context: Context) {
             Log.e(TAG, "Failed to get heart rate", e)
             0
         }
+        */
     }
     
     suspend fun getTodayCalories(): Float {
+        // Samsung Health SDK - return mock data until AAR file is added
+        return 0f
+        /*
         return try {
             val resolver = HealthDataResolver(healthDataStore, null)
             val startTime = getStartOfDay()
@@ -209,6 +242,7 @@ class HealthDataManager(private val context: Context) {
             Log.e(TAG, "Failed to get today's calories", e)
             0f
         }
+        */
     }
     
     private fun getStartOfDay(): Long {
@@ -217,7 +251,8 @@ class HealthDataManager(private val context: Context) {
     }
 }
 
-// Extension function for coroutine support
+// Extension function for coroutine support - commented out until Samsung Health SDK is added
+/*
 suspend fun <T> HealthResultHolder<T>.await(): T {
     return kotlinx.coroutines.suspendCancellableCoroutine { continuation ->
         setResultListener { result ->
@@ -225,3 +260,4 @@ suspend fun <T> HealthResultHolder<T>.await(): T {
         }
     }
 }
+*/
