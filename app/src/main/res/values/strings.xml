@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">운동 트레이너</string>
+    <string name="start_workout">운동 시작</string>
+    <string name="stop_workout">운동 중지</string>
+    <string name="loading">로딩 중...</string>
+    <string name="permission_required">권한이 필요합니다</string>
+    <string name="grant_permission">권한 허용</string>
+    <string name="steps_today">오늘 걸음 수</string>
+    <string name="heart_rate">심박수</string>
+    <string name="calories">칼로리</string>
+    <string name="weather">날씨</string>
+    <string name="ai_coach">AI 코치</string>
+</resources>
