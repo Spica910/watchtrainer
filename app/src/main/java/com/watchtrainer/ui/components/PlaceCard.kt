@@ -17,9 +17,9 @@ fun PlaceCard(
     onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick() },
+            .fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter()
     ) {
         Column(

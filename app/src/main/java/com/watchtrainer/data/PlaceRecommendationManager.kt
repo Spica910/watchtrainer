@@ -162,6 +162,7 @@ class PlaceRecommendationManager(private val context: Context) {
                     )
                     
                     ExercisePlace(
+                        id = "place_${System.currentTimeMillis()}",
                         name = place.name,
                         address = place.vicinity,
                         type = mapPlaceType(place.types),
@@ -244,43 +245,55 @@ class PlaceRecommendationManager(private val context: Context) {
         return when (workoutType) {
             WorkoutType.WALKING, WorkoutType.RUNNING -> listOf(
                 ExercisePlace(
+                    id = "offline_park_1",
                     name = "동네 공원",
                     address = "가까운 공원을 찾아보세요",
                     type = ExercisePlaceType.PARK,
                     distance = 0f,
                     rating = 0f,
                     isIndoor = false,
+                    latitude = 0.0,
+                    longitude = 0.0,
                     recommendationReason = "산책과 조깅에 좋은 장소"
                 ),
                 ExercisePlace(
+                    id = "offline_stadium_1",
                     name = "학교 운동장",
                     address = "근처 학교 운동장",
                     type = ExercisePlaceType.STADIUM,
                     distance = 0f,
                     rating = 0f,
                     isIndoor = false,
+                    latitude = 0.0,
+                    longitude = 0.0,
                     recommendationReason = "트랙 런닝에 적합"
                 )
             )
             WorkoutType.CYCLING -> listOf(
                 ExercisePlace(
+                    id = "offline_cycle_1",
                     name = "자전거 도로",
                     address = "한강 자전거 도로",
                     type = ExercisePlaceType.CYCLE_PATH,
                     distance = 0f,
                     rating = 0f,
                     isIndoor = false,
+                    latitude = 0.0,
+                    longitude = 0.0,
                     recommendationReason = "안전한 자전거 주행"
                 )
             )
             WorkoutType.STRENGTH, WorkoutType.YOGA -> listOf(
                 ExercisePlace(
+                    id = "offline_gym_1",
                     name = "피트니스 센터",
                     address = "근처 헬스장을 검색해보세요",
                     type = ExercisePlaceType.GYM,
                     distance = 0f,
                     rating = 0f,
                     isIndoor = true,
+                    latitude = 0.0,
+                    longitude = 0.0,
                     recommendationReason = "전문 운동 기구 이용 가능"
                 )
             )
@@ -289,24 +302,3 @@ class PlaceRecommendationManager(private val context: Context) {
     }
 }
 
-data class ExercisePlace(
-    val name: String,
-    val address: String,
-    val type: ExercisePlaceType,
-    val distance: Float, // meters
-    val rating: Float,
-    val isIndoor: Boolean,
-    val latitude: Double = 0.0,
-    val longitude: Double = 0.0,
-    val recommendationReason: String = ""
-)
-
-enum class ExercisePlaceType {
-    PARK,
-    GYM,
-    TRAIL,
-    STADIUM,
-    POOL,
-    CYCLE_PATH,
-    OTHER
-}

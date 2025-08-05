@@ -11,6 +11,7 @@ import androidx.wear.compose.material.*
 @Composable
 fun AiMessageCard(message: String) {
     Card(
+        onClick = { /* No action */ },
         modifier = Modifier.fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter(
             startBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.2f),

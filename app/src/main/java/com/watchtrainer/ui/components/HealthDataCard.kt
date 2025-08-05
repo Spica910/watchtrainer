@@ -12,6 +12,7 @@ import com.watchtrainer.data.HealthData
 @Composable
 fun HealthDataCard(healthData: HealthData) {
     Card(
+        onClick = { /* No action */ },
         modifier = Modifier.fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter()
     ) {

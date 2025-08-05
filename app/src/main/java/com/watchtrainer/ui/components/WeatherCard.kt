@@ -13,6 +13,7 @@ import com.watchtrainer.data.WeatherCondition
 @Composable
 fun WeatherCard(weatherData: WeatherData) {
     Card(
+        onClick = { /* No action */ },
         modifier = Modifier.fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter()
     ) {

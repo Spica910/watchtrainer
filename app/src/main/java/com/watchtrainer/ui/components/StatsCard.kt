@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit
 @Composable
 fun StatsCard(stats: WorkoutStats) {
     Card(
+        onClick = { /* No action */ },
         modifier = Modifier.fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter(
             startBackgroundColor = MaterialTheme.colors.primary.copy(alpha = 0.1f),

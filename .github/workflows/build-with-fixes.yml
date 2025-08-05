@@ -1,0 +1,155 @@
+name: Build APK with Fixes
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Apply all build fixes
+      run: |
+        echo "Applying comprehensive build fixes..."
+        
+        # Fix 1: Remove duplicate definitions from PlaceRecommendationManager.kt
+        echo "Fixing PlaceRecommendationManager.kt..."
+        
+        # Remove duplicate class definitions at the end of file if they exist
+        if grep -q "^data class ExercisePlace(" app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt; then
+          lines=$(grep -n "^data class ExercisePlace(" app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt | tail -1 | cut -d: -f1)
+          if [ "$lines" -gt 200 ]; then
+            sed -i "${lines},\$d" app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+          fi
+        fi
+        
+        # Fix missing id parameter in searchNearbyPlaces
+        sed -i '/ExercisePlace(/,/)/ {
+          /id = /! {
+            s/ExercisePlace(/ExercisePlace(\n                        id = "place_${System.currentTimeMillis()}",/
+          }
+        }' app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+        
+        # Fix offline recommendations - add missing parameters
+        # Fix park recommendation
+        sed -i '/name = "동네 공원"/,/^[[:space:]]*)[[:space:]]*$/ {
+          /id = /! s/ExercisePlace(/ExercisePlace(\n                    id = "offline_park_1",/
+          /latitude = /! s/isIndoor = false,/isIndoor = false,\n                    latitude = 0.0,\n                    longitude = 0.0,/
+        }' app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+        
+        # Fix stadium recommendation
+        sed -i '/name = "학교 운동장"/,/^[[:space:]]*)[[:space:]]*$/ {
+          /id = /! s/ExercisePlace(/ExercisePlace(\n                    id = "offline_stadium_1",/
+          /latitude = /! s/isIndoor = false,/isIndoor = false,\n                    latitude = 0.0,\n                    longitude = 0.0,/
+        }' app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+        
+        # Fix cycling path recommendation
+        sed -i '/name = "자전거 도로"/,/^[[:space:]]*)[[:space:]]*$/ {
+          /id = /! s/ExercisePlace(/ExercisePlace(\n                    id = "offline_cycle_1",/
+          /latitude = /! s/isIndoor = false,/isIndoor = false,\n                    latitude = 0.0,\n                    longitude = 0.0,/
+        }' app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+        
+        # Fix gym recommendation
+        sed -i '/name = "피트니스 센터"/,/^[[:space:]]*)[[:space:]]*$/ {
+          /id = /! s/ExercisePlace(/ExercisePlace(\n                    id = "offline_gym_1",/
+          /latitude = /! s/isIndoor = true,/isIndoor = true,\n                    latitude = 0.0,\n                    longitude = 0.0,/
+        }' app/src/main/java/com/watchtrainer/data/PlaceRecommendationManager.kt
+        
+        # Fix 2: WorkoutRepository.kt
+        echo "Fixing WorkoutRepository.kt..."
+        # Add import if not present
+        grep -q "import kotlinx.coroutines.flow.first" app/src/main/java/com/watchtrainer/data/repository/WorkoutRepository.kt || \
+          sed -i '/import kotlinx.coroutines.flow.map/a import kotlinx.coroutines.flow.first' app/src/main/java/com/watchtrainer/data/repository/WorkoutRepository.kt
+        
+        # Fix the .value call
+        sed -i 's/goalDao.getActiveGoals().value ?: return@withContext/goalDao.getActiveGoals().first()/' app/src/main/java/com/watchtrainer/data/repository/WorkoutRepository.kt
+        
+        # Fix 3: WeatherDataManager.kt
+        echo "Fixing WeatherDataManager.kt..."
+        sed -i 's/weather.temperature in 15\.\.25/weather.temperature in 15f..25f/' app/src/main/java/com/watchtrainer/data/WeatherDataManager.kt
+        
+        # Fix 4: Card components
+        echo "Fixing Card components..."
+        
+        # Fix all Card components that don't have onClick
+        for file in app/src/main/java/com/watchtrainer/ui/components/*.kt; do
+          if grep -q "Card(" "$file" && ! grep -q "onClick = " "$file"; then
+            sed -i '0,/Card(/{s/Card(/Card(\n        onClick = { \/* No action *\/ },/}' "$file"
+          fi
+        done
+        
+        # Fix PlaceCard and WorkoutHistoryCard specially
+        sed -i 's/\.clickable { onClick() }//' app/src/main/java/com/watchtrainer/ui/components/PlaceCard.kt
+        sed -i 's/Card(/Card(\n        onClick = onClick,/' app/src/main/java/com/watchtrainer/ui/components/PlaceCard.kt
+        
+        sed -i 's/\.clickable { onClick() }//' app/src/main/java/com/watchtrainer/ui/components/WorkoutHistoryCard.kt
+        sed -i 's/Card(/Card(\n        onClick = onClick,/' app/src/main/java/com/watchtrainer/ui/components/WorkoutHistoryCard.kt
+        
+        # Fix 5: Screen Card components
+        echo "Fixing Screen Card components..."
+        
+        # Fix GoalsScreen Dialog Card
+        sed -i '/Dialog/,/Card(/ {
+          /Card(/ {
+            /onClick/! s/Card(/Card(\n            onClick = { \/* No action *\/ },/
+          }
+        }' app/src/main/java/com/watchtrainer/ui/screens/GoalsScreen.kt
+        
+        # Fix PlacesScreen weather Card
+        sed -i '/weatherData?.let/,/Card(/ {
+          /Card(/ {
+            /onClick/! s/Card(/Card(\n                            onClick = { \/* No action *\/ },/
+          }
+        }' app/src/main/java/com/watchtrainer/ui/screens/PlacesScreen.kt
+        
+        # Fix SettingsScreen Card
+        sed -i '0,/Card(/{
+          /onClick/! s/Card(/Card(\n                    onClick = { \/* No action *\/ },/
+        }' app/src/main/java/com/watchtrainer/ui/screens/SettingsScreen.kt
+        
+        # Fix WorkoutScreen Cards
+        sed -i '/aiMessage.isNotEmpty/,/Card(/ {
+          /Card(/ {
+            /onClick/! s/Card(/Card(\n                    onClick = { \/* No action *\/ },/
+          }
+        }' app/src/main/java/com/watchtrainer/ui/screens/WorkoutScreen.kt
+        
+        sed -i '/Box(/,/Card(/ {
+          /Card(/ {
+            /onClick/! s/Card(/Card(\n            onClick = { \/* No action *\/ },/
+          }
+        }' app/src/main/java/com/watchtrainer/ui/screens/WorkoutScreen.kt
+        
+        # Fix 6: HistoryScreen Chip
+        echo "Fixing HistoryScreen Chip..."
+        # Convert Chip content to label parameter
+        sed -i '/private fun PeriodChip/,/^}$/ {
+          /) {$/,/^[[:space:]]*}[[:space:]]*$/ {
+            s/) {$/,\n        label = {/
+            s/^[[:space:]]*}[[:space:]]*$/        }\n    )/
+          }
+        }' app/src/main/java/com/watchtrainer/ui/screens/HistoryScreen.kt
+
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug
+
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: app-debug
+        path: app/build/outputs/apk/debug/app-debug.apk

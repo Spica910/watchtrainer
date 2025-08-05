@@ -104,6 +104,7 @@ fun WorkoutScreen(
             // AI message
             if (aiMessage.isNotEmpty()) {
                 Card(
+                    onClick = { /* No action */ },
                     modifier = Modifier.fillMaxWidth(),
                     backgroundPainter = CardDefaults.cardBackgroundPainter()
                 ) {
@@ -206,6 +207,7 @@ fun WorkoutTypeDialog(
         contentAlignment = Alignment.Center
     ) {
         Card(
+            onClick = { /* No action */ },
             modifier = Modifier.fillMaxWidth(),
             backgroundPainter = CardDefaults.cardBackgroundPainter()
         ) {

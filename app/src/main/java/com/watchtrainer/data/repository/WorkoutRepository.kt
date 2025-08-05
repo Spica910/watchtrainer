@@ -7,6 +7,7 @@ import com.watchtrainer.data.database.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import java.util.*
 
@@ -118,7 +119,7 @@ class WorkoutRepository(context: Context) {
     }
     
     suspend fun updateGoalsProgress() = withContext(Dispatchers.IO) {
-        val activeGoals = goalDao.getActiveGoals().value ?: return@withContext
+        val activeGoals = goalDao.getActiveGoals().first()
         
         for (goal in activeGoals) {
             val currentValue = when (goal.goalType) {

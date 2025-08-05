@@ -186,7 +186,7 @@ class WeatherDataManager(private val context: Context) {
             weather.temperature > 30 -> "너무 더워요! 실내 운동을 추천합니다. 🏠"
             weather.temperature < 5 -> "추워요! 따뜻하게 입고 운동하세요. 🧤"
             weather.condition == WeatherCondition.RAINY -> "비가 와요! 실내 운동이나 우산을 준비하세요. ☔"
-            weather.condition == WeatherCondition.CLEAR && weather.temperature in 15..25 -> 
+            weather.condition == WeatherCondition.CLEAR && weather.temperature in 15f..25f -> 
                 "완벽한 날씨예요! 야외 운동을 즐기세요! 🌞"
             weather.windSpeed > 10 -> "바람이 강해요! 실내 운동을 고려해보세요. 💨"
             else -> "운동하기 좋은 날씨네요! 💪"

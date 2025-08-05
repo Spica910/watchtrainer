@@ -101,6 +101,7 @@ fun AddGoalDialog(
         onDismissRequest = onDismiss
     ) {
         Card(
+            onClick = { /* No action */ },
             modifier = Modifier.fillMaxWidth(),
             backgroundPainter = CardDefaults.cardBackgroundPainter()
         ) {

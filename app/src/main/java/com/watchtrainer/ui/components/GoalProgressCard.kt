@@ -21,6 +21,7 @@ fun GoalProgressCard(
     val isCompleted = progress >= 1f
     
     Card(
+        onClick = { /* No action */ },
         modifier = Modifier.fillMaxWidth(),
         backgroundPainter = CardDefaults.cardBackgroundPainter(
             startBackgroundColor = if (isCompleted) 

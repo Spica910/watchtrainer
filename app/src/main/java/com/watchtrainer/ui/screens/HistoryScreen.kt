@@ -134,11 +134,12 @@ private fun PeriodChip(
             else 
                 MaterialTheme.colors.surface
         ),
-        modifier = Modifier.height(32.dp)
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.caption2
-        )
-    }
+        modifier = Modifier.height(32.dp),
+        label = {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.caption2
+            )
+        }
+    )
 }
