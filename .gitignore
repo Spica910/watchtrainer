@@ -14,7 +14,8 @@
 bin/
 gen/
 out/
-release/
+#  Uncomment the following line in case you need and you don't have the release build type files in your app
+# release/
 
 # Gradle files
 .gradle/
@@ -43,9 +44,16 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+# Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
+# Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
+
+# Keystore files
+# Uncomment the following lines if you do not want to check your keystore files in.
+#*.jks
+#*.keystore
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
@@ -78,3 +86,28 @@ lint/tmp/
 
 # Android Profiling
 *.hprof
+
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Crashlytics files
+crashlytics/
+crashlytics-build.properties
+com_crashlytics_export_strings.xml
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# JVM crash logs
+hs_err_pid*
+replay_pid*
